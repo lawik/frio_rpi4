@@ -1,6 +1,6 @@
 # reTerminal DM / Raspberry Pi CM4 (64-bit)
 
-## How to build 
+## How to build
 
 There are several stumbling blocks building the need dependencies for
 weston and cog (webkitwpe):
@@ -12,7 +12,7 @@ We had the most success when compiling in the following order
 
 * host-libyaml (needed for host-ruby which in turn is used the compile serveral packages)
 * libsoup3 (for TLS support in cog)
-* the rest 
+* the rest
 
 It helps to manually recompile the packages in buildroot after changing something. Recompile until it works.
 
@@ -60,7 +60,7 @@ This is the base Nerves System configuration for the Raspberry Pi 4 Model B.
 | CPU                  | 1.5 GHz quad-core Cortex-A72 (64-bit mode) |
 | Memory               | 1 GB, 2 GB, 4 GB DRAM            |
 | Storage              | MicroSD                          |
-| Linux kernel         | 6.1 w/ Raspberry Pi patches      |
+| Linux kernel         | 6.6 w/ Raspberry Pi patches      |
 | IEx terminal         | HDMI and USB keyboard (can be changed to UART) |
 | GPIO, I2C, SPI       | Yes - [Elixir Circuits](https://github.com/elixir-circuits) |
 | ADC                  | No                               |
