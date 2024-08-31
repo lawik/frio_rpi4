@@ -1,77 +1,56 @@
 # reTerminal DM / Raspberry Pi CM4 (64-bit)
 
+This is the base Nerves System configuration for the seeed studios reTerminal DM (CM4)
+
 ## How to build
 
-There are several stumbling blocks building the need dependencies for
-weston and cog (webkitwpe):
-
-1. rpi-userland and mesa don't like each other providing egl/opengl. We removed rpi-userland (it's deprecated)
-2. The order in which the buildroot packages are compiled is non deterministic and some packages require but do not define dependencies.
-
-We had the most success when compiling in the following order
-
-* host-libyaml (needed for host-ruby which in turn is used the compile serveral packages)
-* libsoup3 (for TLS support in cog)
-* the rest
-
-It helps to manually recompile the packages in buildroot after changing something. Recompile until it works.
+Prebuild firmware imags are available on github and will be used by nerves.
 
 Webkitwpe is large and compilation is slow. In case it fails with a memory error just run make again.
 
-```
-make <pgk>-reconfigure
-```
 
 ## reTermial DM
 
-The DSI-Display will not start by itself. This might be fixed later. Forcing modprobe to re-enable/reststart works though. For now pin 13 (backlight) is pulled up (full brightness) via dtoverlay in config.txt. The brightness might be changed using hardware PWM if the overlay is disabled.
+The DSI-Display might not start by itself. On some reTerminals it works out of the box, on others forcing modprobe to re-enable/restart enables the display.
+For best results do this directly after setting up udevd.
 
 ```
 :os.cmd(~c"modprobe -r vc4")
 :os.cmd(~c"modprobe vc4")
 ```
 
+
+```
+def setup_udev do
+    :os.cmd(~c"udevd -d")
+    :os.cmd(~c"udevadm trigger --type=subsystems --action=add")
+    :os.cmd(~c"udevadm trigger --type=devices --action=add")
+    :os.cmd(~c"udevadm settle --timeout=30")
+    :os.cmd(~c"modprobe -r vc4")
+    :os.cmd(~c"modprobe vc4")
+end
+
+```
+
+### Backlight 
+
+For now pin 13 (backlight) is pulled up (full brightness) via dtoverlay in config.txt. The brightness might be changed using hardware PWM if the overlay is disabled.
+
+
 An example supervisor can be found in examples/kiosk.ex
 
 Code for the light sensor and led can be found in examples/hardware.ex
 
 
-## Cog
+### Cog
 
-cog needs a writeable directory. This can be configured but /data/nerves_weston works fine
+cog needs a writeable directory. This can be configured – /data/nerves_weston or /run works fine
 
 
+### Firmware sizes
 
-## What changed
+The artifact and firmwware are larger than a normal nerves image, starting at about 130MB. Because of this the fwup size for the A and B partion must be resized in fwup.conf
 
-The artifact and firmwware will be large. The artifact is > 2GB and cannot be hosted on Github packages. The firmware is > 130MB. Because of this the fwup size for the A and B partion must be resized in fwup.conf
-
-[![CircleCI](https://circleci.com/gh/nerves-project/nerves_system_rpi4.svg?style=svg)](https://circleci.com/gh/nerves-project/nerves_system_rpi4)
-[![Hex version](https://img.shields.io/hexpm/v/nerves_system_rpi4.svg "Hex version")](https://hex.pm/packages/nerves_system_rpi4)
-
-This is the base Nerves System configuration for the Raspberry Pi 4 Model B.
-
-![Raspberry Pi 4 image](assets/images/raspberry-pi-4-model-b.jpg)
-<br><sup>[Michael Henzler / Wikimedia Commons / CC BY-SA
-4.0](https://en.wikipedia.org/wiki/File:Raspberry_Pi_4_Model_B_-_Top.jpg)</sup>
-
-| Feature              | Description                      |
-| -------------------- | -------------------------------- |
-| CPU                  | 1.5 GHz quad-core Cortex-A72 (64-bit mode) |
-| Memory               | 1 GB, 2 GB, 4 GB DRAM            |
-| Storage              | MicroSD                          |
-| Linux kernel         | 6.6 w/ Raspberry Pi patches      |
-| IEx terminal         | HDMI and USB keyboard (can be changed to UART) |
-| GPIO, I2C, SPI       | Yes - [Elixir Circuits](https://github.com/elixir-circuits) |
-| ADC                  | No                               |
-| PWM                  | Yes, but no Elixir support       |
-| UART                 | 1 available - `ttyS0`            |
-| Display              | HDMI or 7" RPi Touchscreen       |
-| Camera               | Official RPi Cameras (libcamera) |
-| Ethernet             | Yes                              |
-| WiFi                 | Yes - VintageNet                 |
-| Bluetooth            | Untested                         |
-| Audio                | HDMI/Stereo out                  |
 
 ## Using
 
