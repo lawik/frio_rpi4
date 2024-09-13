@@ -34,14 +34,13 @@ ignore_lcd=1
 dtoverlay=dwc2,dr_mode=host
 
 gpu_mem=512
-dtoverlay=vc4-kms-v3d-pi4,cma-512
-dtoverlay=i2c1,pins_2_3
-dtoverlay=i2c3,pins_4_5
-dtoverlay=imx219,cam0
+dtoverlay=vc4-kms-v3d-pi4,cma-384
 dtoverlay=ramoops
-dtparam=i2c0=on
-dtparam=i2c1=on
-dtparam=i2c1=on
-dtparam=i2c3=on
-gpio=13=pu
-dtoverlay=reTerminal-plus,tp_rotate=1
+
+# From uConsole OS
+gpio=10=ip,np
+dtoverlay=devterm-pmu
+dtoverlay=devterm-panel-uc
+dtoverlay=devterm-misc
+dtoverlay=audremap,pins_12_13
+ignore_lcd=1
