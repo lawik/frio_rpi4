@@ -1,0 +1,9 @@
+config BR2_PACKAGE_DEVTERM
+	bool "devterm"
+	help
+	  devterm
+
+          okay
+
+comment "devterm needs a Linux kernel to be built"
+	depends on !BR2_LINUX_KERNEL
