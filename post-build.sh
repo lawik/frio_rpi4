@@ -2,8 +2,18 @@
 
 set -e
 
-# Trim down staging so that the artifacts can be hosted on GitHub releases
-rm -fr $STAGING_DIR/usr/lib/dri $STAGING_DIR/usr/lib/libWPEWebKit-2.0.so* $STAGING_DIR/usr/lib/wpe-webkit-2.0
+echo "binaries: $BINARIES_DIR"
+echo "host: $HOST_DIR"
+echo "staging: $STAGING_DIR"
+echo "target: $TARGET_DIR"
+echo "build: $BUILD_DIR"
+mkdir -p $BINARIES_DIR/uconsole
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-bt.dtbo $BINARIES_DIR/uconsole/
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-panel-uc.dtbo $BINARIES_DIR/uconsole/
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-misc.dtbo $BINARIES_DIR/uconsole/
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-pmu.dtbo $BINARIES_DIR/uconsole/
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-panel.dtbo $BINARIES_DIR/uconsole/
+cp $BUILD_DIR/linux-custom/arch/arm/boot/dts/overlays/devterm-wifi.dtbo $BINARIES_DIR/uconsole/
 
 # Create the fwup ops script to handling MicroSD/eMMC operations at runtime
 # NOTE: revert.fw is the previous, more limited version of this. ops.fw is

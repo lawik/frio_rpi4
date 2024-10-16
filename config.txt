@@ -40,6 +40,8 @@ dtoverlay=ramoops
 # From uConsole OS
 gpio=10=ip,np
 dtoverlay=devterm-pmu
+dtoverlay=devterm-bt
+dtoverlay=devterm-wifi
 dtoverlay=devterm-panel-uc
 dtoverlay=devterm-misc
 dtoverlay=audremap,pins_12_13
